@@ -45,22 +45,23 @@ action code
 /*************************************  2da Area: Declaraciones **************************************/
 //------> declaracion de terminales 
 terminal html, head, body, h1,h2,h3, h4, h5, h6, title,table,th,td,tr,divhtml,p,br,hr;
-terminal mas, menos, por, div, mod, para, parc, ptoYcoma, caracter;
+terminal mas, menos, por, div, mod, para, parc, ptoYcoma, caracter, coma;
 terminal and, or, not;
 terminal masmas, menosmenos, asignmas, asignmenos,asignpor;
 terminal rojo, amarillo, azul,verde, gris, anaranjado, morado;
 terminal color, textocolor, align, font;
 terminal menor,menorQ, mayor,mayorQ, igual, distinto, asignacion;
 terminal intt, booleann, stringg, charr, doublee;
-terminal truee, falsee, num, id, cadena,print,decimal, comilla, comilla1, IDS;
+terminal truee, falsee, num, id, cadena,print,decimal, floaat;
+terminal comilla, comilla1, IDS;
 terminal izquierda, derecha, centrado;
 terminal t1,t2,t3,t4,t5,t6,t7,t8,t9,t10, dolar;
 
 //------> declaracion de no terminales
 non terminal  INICIO,E,INICIO1,CUERPOHTML,TITLE, CUERPO_BODY, CUERPO_BODY1,BR,H;
 non terminal HTML, BODY,COLORES, COLOR_ETIQUETA, COLOR_ETIQUETA1, TIPOS_ALIGN, NOMBRES_FUENTES,FUENTES,ETIQUETAS;
-non terminal ALIGN, ETIQUETAS1, TEXTO, TEXTO1,P,EXPR, PRINT, SENTENCIAS, SENTENCIAS1;
-
+non terminal ALIGN, ETIQUETAS1, TEXTO, TEXTO1,P,EXPR, PRINT, SENTENCIAS, SENTENCIAS1,TIPODATOS, VARIABLES, ASIGNACION_VAR;
+non terminal CONDICION;
 //----> precedencia de menor a mayor 
 precedence left mas, menos;
 precedence left por, div, and, or, not;
@@ -153,6 +154,68 @@ SENTENCIAS::= SENTENCIAS SENTENCIAS1
 ;
 
 SENTENCIAS1::= print para EXPR parc ptoYcoma
+              |TIPODATOS:tipo VARIABLES:var ptoYcoma
+              |VARIABLES:var ptoYcoma
+;
+
+VARIABLES::= VARIABLES:vars coma id:id                                          
+            |VARIABLES:vars coma id:id ASIGNACION_VAR                
+            |id:id                                                            
+            |id:id  ASIGNACION_VAR:asign                                    
+;
+
+ASIGNACION_VAR::= asignacion EXPR:expr               
+                   {:RESULT=expr;:}
+;
+
+CONDICION::= EXPR mayor EXPR
+                {:
+                  RESULT="";
+                :}
+            |EXPR menor EXPR
+                {:
+                  RESULT="";
+                :}
+            |EXPR mayorQ EXPR
+                {:
+                  RESULT="";
+                :}
+            |EXPR menorQ EXPR
+                {:
+                  RESULT="";
+                :}
+            |EXPR igual EXPR
+                {:
+                  RESULT="";
+                :}
+            |EXPR distinto EXPR
+                {:
+                  RESULT="";
+                :}
+            |EXPR asignacion EXPR
+                {:
+                  RESULT="";
+                :}
+            |EXPR mod EXPR
+                {:
+                  RESULT="";
+                :}
+            |not CONDICION
+                {:
+                  RESULT="";
+                :}
+            |CONDICION and CONDICION
+                {:
+                  RESULT="";
+                :}
+            |CONDICION or CONDICION
+                {:
+                  RESULT="";
+                :}
+            |para CONDICION parc
+                {:
+                  RESULT="";
+                :}
 ;
 
 ETIQUETAS::= ETIQUETAS ETIQUETAS1
@@ -175,6 +238,34 @@ ALIGN::=align asignacion cadena
 ;
 
 FUENTES::= font asignacion cadena
+;
+
+EXPR::= EXPR:e mas:m EXPR:ex    
+       |EXPR:e menos:m EXPR:ex  
+       |EXPR:e por:p EXPR:ex 
+       |EXPR:e div:d EXPR:ex  
+       |menos:e EXPR:ex    
+       |num:e               
+       |id:id                 
+       |cadena:c            
+       |decimal:d             
+       |caracter:c
+       |truee:t              
+       |falsee:f              
+       |para:pa EXPR:e parc:pc
+;
+
+TIPODATOS::= intt:t
+               {:RESULT=t;:}
+            |booleann:t
+               {:RESULT=t;:}
+            |stringg:t
+               {:RESULT=t;:} 
+            |charr:t
+               {:RESULT=t;:} 
+            |doublee:t
+               {:RESULT=t;:} 
+            |floaat
 ;
 
 COLORES::= rojo
@@ -201,19 +292,4 @@ NOMBRES_FUENTES::= t1
                   |t8
                   |t9
                   |t10
-;
-
-EXPR::= EXPR:e mas:m EXPR:ex    
-       |EXPR:e menos:m EXPR:ex  
-       |EXPR:e por:p EXPR:ex 
-       |EXPR:e div:d EXPR:ex  
-       |menos:e EXPR:ex    
-       |num:e               
-       |id:id                 
-       |cadena:c            
-       |decimal:d             
-       |caracter:c
-       |truee:t              
-       |falsee:f              
-       |para:pa EXPR:e parc:pc
 ;

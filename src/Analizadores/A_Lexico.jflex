@@ -97,6 +97,7 @@ ComentarioLinea =  "/" "/" [^}\n]*
 "String"         { System.out.println("Reconocio "+yytext()+" dosPtos"); return new Symbol(Simbolos.stringg, yycolumn, yyline, yytext()); }
 "char"         { System.out.println("Reconocio "+yytext()+" dosPtos"); return new Symbol(Simbolos.charr, yycolumn, yyline, yytext()); }
 "double"         { System.out.println("Reconocio "+yytext()+" dosPtos"); return new Symbol(Simbolos.doublee, yycolumn, yyline, yytext()); }
+"float"         { System.out.println("Reconocio "+yytext()+" dosPtos"); return new Symbol(Simbolos.floaat, yycolumn, yyline, yytext()); }
 
 "true"         { System.out.println("Reconocio "+yytext()+" dosPtos"); return new Symbol(Simbolos.truee, yycolumn, yyline, yytext()); }
 "false"         { System.out.println("Reconocio "+yytext()+" dosPtos"); return new Symbol(Simbolos.falsee, yycolumn, yyline, yytext()); }
@@ -110,6 +111,8 @@ ComentarioLinea =  "/" "/" [^}\n]*
 ")"         { System.out.println("Reconocio "+yytext()+" dosPtos"); return new Symbol(Simbolos.parc, yycolumn, yyline, yytext()); }
 
 ";"         { System.out.println("Reconocio "+yytext()+" dosPtos"); return new Symbol(Simbolos.ptoYcoma, yycolumn, yyline, yytext()); }
+","         { System.out.println("Reconocio "+yytext()+" dosPtos"); return new Symbol(Simbolos.coma, yycolumn, yyline, yytext()); }
+
 
 "\""         { System.out.println("Reconocio "+yytext()+" dosPtos"); return new Symbol(Simbolos.comilla, yycolumn, yyline, yytext()); }
 "\”"         { System.out.println("Reconocio "+yytext()+" dosPtos"); return new Symbol(Simbolos.comilla1, yycolumn, yyline, yytext()); }
