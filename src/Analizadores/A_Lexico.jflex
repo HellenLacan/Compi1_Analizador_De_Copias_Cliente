@@ -135,6 +135,8 @@ ComentarioLinea =  "/" "/" [^}\n]*
 "Helvetica"         { System.out.println("Reconocio "+yytext()+" pto"); return new Symbol(Simbolos.t9, yycolumn, yyline, yytext()); }
 "Georgia"         { System.out.println("Reconocio "+yytext()+" pto"); return new Symbol(Simbolos.t10, yycolumn, yyline, yytext()); }
 
+"$"         { System.out.println("Reconocio "+yytext()+" pto"); return new Symbol(Simbolos.dolar, yycolumn, yyline, yytext()); }
+
 
 
 

@@ -54,7 +54,7 @@ terminal menor,menorQ, mayor,mayorQ, igual, distinto, asignacion;
 terminal intt, booleann, stringg, charr, doublee;
 terminal truee, falsee, num, id, cadena,print,decimal, comilla, comilla1, IDS;
 terminal izquierda, derecha, centrado;
-terminal t1,t2,t3,t4,t5,t6,t7,t8,t9,t10;
+terminal t1,t2,t3,t4,t5,t6,t7,t8,t9,t10, dolar;
 
 //------> declaracion de no terminales
 non terminal  INICIO,E,INICIO1,CUERPOHTML,TITLE, CUERPO_BODY, CUERPO_BODY1,BR,H;
@@ -144,6 +144,7 @@ TEXTO::= TEXTO TEXTO1
 ;
 TEXTO1::= id
         |cadena
+        
 ;
 
 ETIQUETAS::= ETIQUETAS ETIQUETAS1
