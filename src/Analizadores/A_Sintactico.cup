@@ -1,0 +1,196 @@
+/****************************************  1ra Area: Codigo de Usuario *******************************************/
+//-------> importaciones, paquetes
+package Analizadores;
+import java_cup.runtime.Symbol;
+import java.util.ArrayList;
+
+/**********************************  Codigo para el parser, variables, metodos **********************************/
+
+parser code
+{:
+    public String resultado="";
+
+    //Metodo al que se llama automaticamente ante algun error sintactico
+    public void syntax_error(Symbol s)
+    {        
+        String lexema = s.value.toString();
+        int fila = s.right;
+        int columna = s.left;
+        
+        System.out.println("!!!!!!! Error Sintactico Recuperado !!!!!!!");
+        System.out.println("\t\tLexema: "+lexema);
+        System.out.println("\t\tFila: "+fila);
+        System.out.println("\t\tColumna: "+columna);
+    }
+    
+    //Metodo al que se llama en el momento en que ya no es posible una recuperacion de errores
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
+    {        
+        String lexema = s.value.toString();
+        int fila = s.right;
+        int columna = s.left;
+        
+        System.out.println("!!!!!!! Error Sintactico, Panic Mode !!!!!!! ");
+        System.out.println("\t\tLexema: "+lexema);
+        System.out.println("\t\tFila: "+fila);
+        System.out.println("\t\tColumna: "+columna);
+    }
+
+ :}
+
+/************************************* Codigo para las acciones gramaticales *********************************/
+action code
+{::}
+
+/*************************************  2da Area: Declaraciones **************************************/
+//------> declaracion de terminales 
+terminal html, head, body, h1,h2,h3, h4, h5, h6, title,table,th,td,tr,divhtml,p,br,hr;
+terminal mas, menos, por, div, mod, para, parc, ptoYcoma;
+terminal and, or, not;
+terminal masmas, menosmenos, asignmas, asignmenos,asignpor;
+terminal rojo, amarillo, azul,verde, gris, anaranjado, morado;
+terminal color, textocolor, align, font;
+terminal menor,menorQ, mayor,mayorQ, igual, distinto, asignacion;
+terminal intt, booleann, stringg, charr, doublee;
+terminal truee, falsee, num, id, cadena,print,decimal, comilla, comilla1, IDS;
+terminal izquierda, derecha, centrado;
+terminal t1,t2,t3,t4,t5,t6,t7,t8,t9,t10;
+
+//------> declaracion de no terminales
+non terminal  INICIO,E,INICIO1,CUERPOHTML,TITLE, CUERPO_BODY, CUERPO_BODY1,BR,H;
+non terminal HTML, BODY,COLORES, COLOR_ETIQUETA, COLOR_ETIQUETA1, TIPOS_ALIGN, NOMBRES_FUENTES,FUENTES,ETIQUETAS;
+non terminal ALIGN, ETIQUETAS1, TEXTO, TEXTO1,P;
+
+//----> precedencia de menor a mayor 
+precedence left mas, menos;
+precedence left por, div, and, or, not;
+precedence left mayor, menor;
+precedence left mayorQ, menorQ;
+
+start with INICIO;
+
+/*************************************  23a area: Reglas Semanticas **************************************/
+
+INICIO::=INICIO1:a {: :};
+
+INICIO1::= menor:a1 html:a2 mayor:a3 CUERPOHTML:a4 
+           {:
+           :}
+;
+CUERPOHTML::=menor head mayor  TITLE menor div head mayor BODY 
+             {:
+             :}
+;
+
+TITLE::= menor title mayor id:a4 menor div title mayor
+          {:
+          :}
+;
+
+BODY::=  menor body mayor CUERPO_BODY menor div body mayor menor div html mayor
+        |menor body mayor             menor div body mayor menor div html mayor
+          {:
+          :}  
+;
+
+CUERPO_BODY::= CUERPO_BODY CUERPO_BODY1:a1
+                {:
+                :}
+              |CUERPO_BODY1:a1
+                {:
+                :}
+;
+
+CUERPO_BODY1::= menor br mayor
+               |H   
+               |P            
+;
+
+P::= menor p ETIQUETAS mayor  TEXTO  menor div p mayor
+    |menor p           mayor  TEXTO  menor div p mayor
+    |menor p ETIQUETAS mayor         menor div p mayor
+    |menor p           mayor         menor div p mayor
+;
+
+H::= menor h1 ETIQUETAS mayor  TEXTO  menor div h1 mayor
+    |menor h1           mayor  TEXTO  menor div h1 mayor
+    |menor h1 ETIQUETAS mayor         menor div h1 mayor
+    |menor h1           mayor         menor div h1 mayor
+    |menor h2 ETIQUETAS mayor  TEXTO  menor div h2 mayor
+    |menor h2           mayor  TEXTO  menor div h2 mayor
+    |menor h2 ETIQUETAS mayor         menor div h2 mayor
+    |menor h2           mayor         menor div h2 mayor
+    |menor h3 ETIQUETAS mayor  TEXTO  menor div h3 mayor
+    |menor h3           mayor  TEXTO  menor div h3 mayor
+    |menor h3 ETIQUETAS mayor         menor div h3 mayor
+    |menor h3           mayor         menor div h3 mayor
+    |menor h4 ETIQUETAS mayor  TEXTO  menor div h4 mayor
+    |menor h4           mayor  TEXTO  menor div h4 mayor
+    |menor h4 ETIQUETAS mayor         menor div h4 mayor
+    |menor h4           mayor         menor div h4 mayor
+    |menor h5 ETIQUETAS mayor  TEXTO  menor div h5 mayor
+    |menor h5           mayor  TEXTO  menor div h5 mayor
+    |menor h5 ETIQUETAS mayor         menor div h5 mayor
+    |menor h5           mayor         menor div h5 mayor
+    |menor h6 ETIQUETAS mayor  TEXTO  menor div h6 mayor
+    |menor h6           mayor  TEXTO  menor div h6 mayor
+    |menor h6 ETIQUETAS mayor         menor div h6 mayor
+    |menor h6           mayor         menor div h6 mayor
+
+;
+
+TEXTO::= TEXTO TEXTO1
+        |TEXTO1
+;
+TEXTO1::= id
+        |cadena
+;
+
+ETIQUETAS::= ETIQUETAS ETIQUETAS1
+            |ETIQUETAS1
+;
+
+ETIQUETAS1::=COLOR_ETIQUETA
+          |ALIGN
+          |FUENTES
+;
+
+COLOR_ETIQUETA::= COLOR_ETIQUETA1 asignacion comilla COLORES comilla  
+;
+
+COLOR_ETIQUETA1::= color
+                  |textocolor
+;
+
+ALIGN::=align asignacion comilla TIPOS_ALIGN comilla
+;
+
+FUENTES::= font asignacion comilla NOMBRES_FUENTES comilla
+;
+
+COLORES::= rojo
+        |amarillo
+        |azul
+        |verde
+        |gris
+        |anaranjado
+        |morado
+;
+
+TIPOS_ALIGN::= izquierda
+              |derecha
+              |centrado
+;
+
+NOMBRES_FUENTES::= t1
+                  |t2
+                  |t3
+                  |t4
+                  |t5
+                  |t6
+                  |t7
+                  |t8
+                  |t9
+                  |t10
+;
+
