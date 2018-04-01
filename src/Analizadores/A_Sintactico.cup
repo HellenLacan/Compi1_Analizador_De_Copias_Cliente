@@ -45,7 +45,7 @@ action code
 /*************************************  2da Area: Declaraciones **************************************/
 //------> declaracion de terminales 
 terminal html, head, body, h1,h2,h3, h4, h5, h6, title,table,th,td,tr,divhtml,p,br,hr;
-terminal mas, menos, por, div, mod, para, parc, ptoYcoma;
+terminal mas, menos, por, div, mod, para, parc, ptoYcoma, caracter;
 terminal and, or, not;
 terminal masmas, menosmenos, asignmas, asignmenos,asignpor;
 terminal rojo, amarillo, azul,verde, gris, anaranjado, morado;
@@ -144,6 +144,7 @@ TEXTO::= TEXTO TEXTO1
 ;
 TEXTO1::= id
         |cadena
+        |caracter
         |dolar dolar SENTENCIAS dolar dolar
 ;
 
@@ -203,27 +204,16 @@ NOMBRES_FUENTES::= t1
 ;
 
 EXPR::= EXPR:e mas:m EXPR:ex    
-          {:RESULT=e.toString()+m.toString()+ex.toString();:}
        |EXPR:e menos:m EXPR:ex  
-          {:RESULT=e.toString()+m.toString()+ex.toString();:}
        |EXPR:e por:p EXPR:ex 
-          {:RESULT=e.toString()+p.toString()+ex.toString();:}
        |EXPR:e div:d EXPR:ex  
-          {:RESULT=e.toString()+d.toString()+ex.toString();:}
        |menos:e EXPR:ex    
-          {:RESULT=e.toString()+ex.toString();:}
        |num:e               
-          {:RESULT=e.toString();:} 
        |id:id                 
-          {:RESULT=id.toString();:}
        |cadena:c            
-          {:RESULT=c.toString();:}
        |decimal:d             
-          {:RESULT=d.toString();:}
+       |caracter:c
        |truee:t              
-          {:RESULT=t.toString();:}
        |falsee:f              
-          {:RESULT=f.toString();:}
        |para:pa EXPR:e parc:pc
-          {:RESULT=pa.toString()+e.toString()+pc.toString();:}
 ;

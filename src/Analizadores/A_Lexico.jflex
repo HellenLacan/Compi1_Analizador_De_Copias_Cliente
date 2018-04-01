@@ -27,9 +27,11 @@ import java.util.ArrayList;
 
 //------> Expresiones Regulares
 numero = [0-9]+
-id = [A-Za-zñÑ] [_0-9A-Za-zñÑ]* 
+id = [A-Za-zñÑ] ([_0-9A-Za-zñÑ]*|\_) | \_ ([_0-9A-Za-zñÑ]*|\_)*
 decimal = [0-9]+ \. [0-9]+ | \. [0-9]+ 
-cadena =  "\"" [^\"\n]* "\""     
+cadena =  "\"" [^\"\n]* "\""   
+caracter =  "\'" [A-Za-zñÑ] "\'"  | "\'" [_0-9A-Za-zñÑ] "\'"     
+  
  
 //------> Estas ER son para omitir comentarios, en este caso no se omitiran debido a que se necesita saber cuantos comentarios se repiten en un proyecto para la deteccion de copias.
 ComentarioMultiLinea = "/*" [^*] ~"*/" | "/*" "*"+ "/" 
@@ -146,6 +148,7 @@ ComentarioLinea =  "/" "/" [^}\n]*
  {decimal}   { System.out.println("Reconocio "+yytext()+" decimal"); return new Symbol(Simbolos.decimal, yycolumn, yyline, yytext()); }
  {cadena}    { System.out.println("Reconocio "+yytext()+" cadena"); return new Symbol(Simbolos.cadena, yycolumn, yyline, yytext()); }
 //{ComentarioLinea}            {  System.out.println("Reconocio "+yytext()+" coment"); return new Symbol(Simbolos.cadena, yycolumn, yyline, yytext());}
+ {caracter}    { System.out.println("Reconocio "+yytext()+" cadena"); return new Symbol(Simbolos.caracter, yycolumn, yyline, yytext()); }
 
 //------> Espacios
 [ \t\r\n\f]                  {/* Espacios en blanco, se ignoran */}
