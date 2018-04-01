@@ -161,11 +161,14 @@ SENTENCIAS1::= print para EXPR parc ptoYcoma
 VARIABLES::= VARIABLES:vars coma id:id                                          
             |VARIABLES:vars coma id:id ASIGNACION_VAR                
             |id:id                                                            
-            |id:id  ASIGNACION_VAR:asign                                    
+            |id:id  ASIGNACION_VAR:asign
 ;
 
 ASIGNACION_VAR::= asignacion EXPR:expr
-                 |asignacion CONDICION:expr               
+                 |asignacion CONDICION:expr  
+                 |asignmas EXPR:expr
+                 |asignmenos EXPR:expr
+                 |asignpor EXPR:expr
                    {:RESULT=expr;:}
 ;
 

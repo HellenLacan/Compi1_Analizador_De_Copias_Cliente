@@ -993,11 +993,11 @@ public class Analizador_Lexico implements java_cup.runtime.Scanner {
             }
           case 101: break;
           case 17: 
-            { System.out.println("Reconocio "+yytext()+" dosPtos"); return new Symbol(Simbolos.ptoYcoma, yycolumn, yyline, yytext());
+            { System.out.println("Reconocio "+yytext()+" ptoYcoma"); return new Symbol(Simbolos.ptoYcoma, yycolumn, yyline, yytext());
             }
           case 102: break;
           case 18: 
-            { System.out.println("Reconocio "+yytext()+" dosPtos"); return new Symbol(Simbolos.coma, yycolumn, yyline, yytext());
+            { System.out.println("Reconocio "+yytext()+" coma"); return new Symbol(Simbolos.coma, yycolumn, yyline, yytext());
             }
           case 103: break;
           case 19: 
@@ -1085,7 +1085,7 @@ public class Analizador_Lexico implements java_cup.runtime.Scanner {
             }
           case 124: break;
           case 40: 
-            { System.out.println("Reconocio "+yytext()+" pto"); return new Symbol(Simbolos.asignmas, yycolumn, yyline, yytext());
+            { System.out.println("Reconocio "+yytext()+" plusplus"); return new Symbol(Simbolos.asignmas, yycolumn, yyline, yytext());
             }
           case 125: break;
           case 41: 
