@@ -59,7 +59,7 @@ terminal t1,t2,t3,t4,t5,t6,t7,t8,t9,t10, dolar;
 //------> declaracion de no terminales
 non terminal  INICIO,E,INICIO1,CUERPOHTML,TITLE, CUERPO_BODY, CUERPO_BODY1,BR,H;
 non terminal HTML, BODY,COLORES, COLOR_ETIQUETA, COLOR_ETIQUETA1, TIPOS_ALIGN, NOMBRES_FUENTES,FUENTES,ETIQUETAS;
-non terminal ALIGN, ETIQUETAS1, TEXTO, TEXTO1,P;
+non terminal ALIGN, ETIQUETAS1, TEXTO, TEXTO1,P,EXPR, PRINT, SENTENCIAS, SENTENCIAS1;
 
 //----> precedencia de menor a mayor 
 precedence left mas, menos;
@@ -144,7 +144,14 @@ TEXTO::= TEXTO TEXTO1
 ;
 TEXTO1::= id
         |cadena
-        
+        |dolar dolar SENTENCIAS dolar dolar
+;
+
+SENTENCIAS::= SENTENCIAS SENTENCIAS1
+             |SENTENCIAS1
+;
+
+SENTENCIAS1::= print para EXPR parc ptoYcoma
 ;
 
 ETIQUETAS::= ETIQUETAS ETIQUETAS1
@@ -156,17 +163,17 @@ ETIQUETAS1::=COLOR_ETIQUETA
           |FUENTES
 ;
 
-COLOR_ETIQUETA::= COLOR_ETIQUETA1 asignacion comilla COLORES comilla  
+COLOR_ETIQUETA::= COLOR_ETIQUETA1 asignacion cadena
 ;
 
 COLOR_ETIQUETA1::= color
                   |textocolor
 ;
 
-ALIGN::=align asignacion comilla TIPOS_ALIGN comilla
+ALIGN::=align asignacion cadena
 ;
 
-FUENTES::= font asignacion comilla NOMBRES_FUENTES comilla
+FUENTES::= font asignacion cadena
 ;
 
 COLORES::= rojo
@@ -195,3 +202,28 @@ NOMBRES_FUENTES::= t1
                   |t10
 ;
 
+EXPR::= EXPR:e mas:m EXPR:ex    
+          {:RESULT=e.toString()+m.toString()+ex.toString();:}
+       |EXPR:e menos:m EXPR:ex  
+          {:RESULT=e.toString()+m.toString()+ex.toString();:}
+       |EXPR:e por:p EXPR:ex 
+          {:RESULT=e.toString()+p.toString()+ex.toString();:}
+       |EXPR:e div:d EXPR:ex  
+          {:RESULT=e.toString()+d.toString()+ex.toString();:}
+       |menos:e EXPR:ex    
+          {:RESULT=e.toString()+ex.toString();:}
+       |num:e               
+          {:RESULT=e.toString();:} 
+       |id:id                 
+          {:RESULT=id.toString();:}
+       |cadena:c            
+          {:RESULT=c.toString();:}
+       |decimal:d             
+          {:RESULT=d.toString();:}
+       |truee:t              
+          {:RESULT=t.toString();:}
+       |falsee:f              
+          {:RESULT=f.toString();:}
+       |para:pa EXPR:e parc:pc
+          {:RESULT=pa.toString()+e.toString()+pc.toString();:}
+;

@@ -29,7 +29,7 @@ import java.util.ArrayList;
 numero = [0-9]+
 id = [A-Za-zñÑ] [_0-9A-Za-zñÑ]* 
 decimal = [0-9]+ \. [0-9]+ | \. [0-9]+ 
-cadena =  "\"" [^\"\n centrado izquierda derecha rojo amarillo azul verde gris anaranjado morado Verdana Times New Roman Tw Cen MT Suiza Script Romana Modern Helvetica Georgia]* "\""     
+cadena =  "\"" [^\"\n]* "\""     
  
 //------> Estas ER son para omitir comentarios, en este caso no se omitiran debido a que se necesita saber cuantos comentarios se repiten en un proyecto para la deteccion de copias.
 ComentarioMultiLinea = "/*" [^*] ~"*/" | "/*" "*"+ "/" 
