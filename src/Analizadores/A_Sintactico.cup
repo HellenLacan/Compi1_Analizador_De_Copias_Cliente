@@ -44,24 +44,24 @@ action code
 
 /*************************************  2da Area: Declaraciones **************************************/
 //------> declaracion de terminales 
-terminal html, head, body, h1,h2,h3, h4, h5, h6, title,table,th,td,tr,divhtml,p,br,hr;
+terminal html, head, body, h1,h2,h3, h4, h5, h6, title,table,th,td,tr,divhtml,p,br,hr, tda,tha;
 terminal mas, menos, por, div, mod, para, parc, ptoYcoma, caracter, coma;
-terminal and, or, not;
+terminal and, or, not, result,score,clases,funciones,nombre,metodos, cantidad,variables;
 terminal masmas, menosmenos, asignmas, asignmenos,asignpor;
 terminal rojo, amarillo, azul,verde, gris, anaranjado, morado;
 terminal color, textocolor, align, font;
 terminal menor,menorQ, mayor,mayorQ, igual, distinto, asignacion;
 terminal intt, booleann, stringg, charr, doublee;
 terminal truee, falsee, num, id, cadena,print,decimal, floaat;
-terminal comilla, comilla1, IDS;
-terminal izquierda, derecha, centrado;
-terminal t1,t2,t3,t4,t5,t6,t7,t8,t9,t10, dolar;
+terminal comilla, comilla1, IDS, pto, cora,corc;
+terminal izquierda, derecha, centrado, thc,tdc;
+terminal t1,t2,t3,t4,t5,t6,t7,t8,t9,t10, dolar,ctable;
 
 //------> declaracion de no terminales
 non terminal  INICIO,E,INICIO1,CUERPOHTML,TITLE, CUERPO_BODY, CUERPO_BODY1,BR,H;
 non terminal HTML, BODY,COLORES, COLOR_ETIQUETA, COLOR_ETIQUETA1, TIPOS_ALIGN, NOMBRES_FUENTES,FUENTES,ETIQUETAS;
 non terminal ALIGN, ETIQUETAS1, TEXTO, TEXTO1,P,EXPR, PRINT, SENTENCIAS, SENTENCIAS1,TIPODATOS, VARIABLES, ASIGNACION_VAR;
-non terminal CONDICION;
+non terminal CONDICION, TABLE, TABLE1,TRBODY,TABLE2,TABLE3,TABLE4,TABLE5,TABLE6, RESULT;
 //----> precedencia de menor a mayor 
 precedence left mas, menos;
 precedence left por, div, and, or, not;
@@ -76,130 +76,545 @@ INICIO::=INICIO1:a {: :};
 
 INICIO1::= menor:a1 html:a2 mayor:a3 CUERPOHTML:a4 
            {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString(); 
            :}
 ;
-CUERPOHTML::=menor head mayor  TITLE menor div head mayor BODY 
+CUERPOHTML::=menor:a1 head:a2 mayor:a3  TITLE:a4 menor:a5 div:a6 head:a7 mayor:a8 BODY:a9 
              {:
+                RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
              :}
 ;
 
-TITLE::= menor title mayor id:a4 menor div title mayor
+TITLE::= menor:a1 title:a2 mayor:a3 id:a4 menor:a5 div:a6 title:a7 mayor:a8
           {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
           :}
 ;
 
-BODY::=  menor body mayor CUERPO_BODY menor div body mayor menor div html mayor
-        |menor body mayor             menor div body mayor menor div html mayor
+BODY::=  menor:a1 body:a2 mayor:a3 CUERPO_BODY:a4 menor:a5 div:a6 body:a7 mayor:a8 menor:a9 div:a10 html:a11 mayor:a12
           {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString()+a10.toString()+a11.toString()+a12.toString();
+          :}
+        |menor:a1 body:a2 mayor:a3             menor:a5 div:a6 body:a7 mayor:a8 menor:a9 div:a10 html:a11 mayor:a12
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString()+a10.toString()+a11.toString()+a12.toString();
           :}  
 ;
 
 CUERPO_BODY::= CUERPO_BODY CUERPO_BODY1:a1
                 {:
+                   RESULT=a1.toString();
                 :}
               |CUERPO_BODY1:a1
                 {:
+                   RESULT=a1.toString();           
                 :}
 ;
 
-CUERPO_BODY1::= menor br mayor
-               |H   
-               |P            
-;
-
-P::= menor p ETIQUETAS mayor  TEXTO  menor div p mayor
-    |menor p           mayor  TEXTO  menor div p mayor
-    |menor p ETIQUETAS mayor         menor div p mayor
-    |menor p           mayor         menor div p mayor
-;
-
-H::= menor h1 ETIQUETAS mayor  TEXTO  menor div h1 mayor
-    |menor h1           mayor  TEXTO  menor div h1 mayor
-    |menor h1 ETIQUETAS mayor         menor div h1 mayor
-    |menor h1           mayor         menor div h1 mayor
-    |menor h2 ETIQUETAS mayor  TEXTO  menor div h2 mayor
-    |menor h2           mayor  TEXTO  menor div h2 mayor
-    |menor h2 ETIQUETAS mayor         menor div h2 mayor
-    |menor h2           mayor         menor div h2 mayor
-    |menor h3 ETIQUETAS mayor  TEXTO  menor div h3 mayor
-    |menor h3           mayor  TEXTO  menor div h3 mayor
-    |menor h3 ETIQUETAS mayor         menor div h3 mayor
-    |menor h3           mayor         menor div h3 mayor
-    |menor h4 ETIQUETAS mayor  TEXTO  menor div h4 mayor
-    |menor h4           mayor  TEXTO  menor div h4 mayor
-    |menor h4 ETIQUETAS mayor         menor div h4 mayor
-    |menor h4           mayor         menor div h4 mayor
-    |menor h5 ETIQUETAS mayor  TEXTO  menor div h5 mayor
-    |menor h5           mayor  TEXTO  menor div h5 mayor
-    |menor h5 ETIQUETAS mayor         menor div h5 mayor
-    |menor h5           mayor         menor div h5 mayor
-    |menor h6 ETIQUETAS mayor  TEXTO  menor div h6 mayor
-    |menor h6           mayor  TEXTO  menor div h6 mayor
-    |menor h6 ETIQUETAS mayor         menor div h6 mayor
-    |menor h6           mayor         menor div h6 mayor
-
-;
-
-TEXTO::= TEXTO TEXTO1
-        |TEXTO1
-;
-TEXTO1::= id
-        |cadena
-        |caracter
-        |dolar dolar SENTENCIAS dolar dolar
-;
-
-SENTENCIAS::= SENTENCIAS SENTENCIAS1
-             |SENTENCIAS1
-;
-
-SENTENCIAS1::= print para EXPR parc ptoYcoma
-              |TIPODATOS:tipo VARIABLES:var ptoYcoma
-              |VARIABLES:var ptoYcoma
-;
-
-VARIABLES::= VARIABLES:vars coma id:id                                          
-            |VARIABLES:vars coma id:id ASIGNACION_VAR                
-            |id:id                                                            
-            |id:id  ASIGNACION_VAR:asign
-;
-
-ASIGNACION_VAR::= asignacion EXPR:expr
-                 |asignacion CONDICION:expr  
-                 |asignmas EXPR:expr
-                 |asignmenos EXPR:expr
-                 |asignpor EXPR:expr
-                   {:RESULT=expr;:}
-;
-
-CONDICION::= EXPR mayor EXPR
+CUERPO_BODY1::= menor:a1 br:a2 mayor:a3
                 {:
-                  RESULT="";
+                   RESULT=a1.toString()+a2.toString()+a3.toString();           
                 :}
-            |EXPR menor EXPR
+               |H:a1 
                 {:
-                  RESULT="";
-                :}
-            |EXPR mayorQ EXPR
+                   RESULT=a1.toString();           
+                :}  
+               |P:a1
                 {:
-                  RESULT="";
+                   RESULT=a1.toString();           
                 :}
-            |EXPR menorQ EXPR
+               |TABLE:a1   
                 {:
-                  RESULT="";
-                :}
-            |EXPR igual EXPR
+                   RESULT=a1.toString();           
+                :}         
+;
+
+TABLE::= menor:a1 table:a2 ETIQUETAS:a3 mayor:a4            ctable:a5 
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString();
+          :}
+        |menor:a1 table:a2           mayor:a3            ctable:a4 
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString();
+          :}
+        |menor:a1 table:a2 ETIQUETAS:a3 mayor:a4 TABLE1:a5     ctable:a6  
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString();
+          :}  
+        |menor:a1 table:a2           mayor:a3 TABLE1:a4     ctable:a5
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString();
+          :}
+;
+
+TABLE1::= TABLE1 TABLE2:a1
                 {:
-                  RESULT="";
-                :}
-            |EXPR distinto EXPR
+                   RESULT=a1.toString();           
+                :}  
+         |TABLE2:a1
                 {:
-                  RESULT="";
+                   RESULT=a1.toString();           
                 :}
-            |EXPR asignacion EXPR
+;
+
+TABLE2::= menor:a1 tr:a2 mayor:a3 TABLE4:a4  menor:a5 div:a6 tr:a7 mayor:a8
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
+          :}
+          |menor:a1 tr:a2 mayor:a3         menor:a4 div:a5 tr:a6 mayor:a7
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString();
+          :}
+;
+
+TABLE4::= tha:a1        thc:a2 
+          {:
+             RESULT=a1.toString()+a2.toString();
+          :}
+         |tda:a1        tdc:a2 
+          {:
+             RESULT=a1.toString()+a2.toString();
+          :}
+         |tha:a1 TEXTO:a2  thc:a3 
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString();
+          :}
+         |tda:a1 TEXTO:a2  tdc:a3 
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString();
+          :}
+         |TABLE4:a1 tha:a2         thc:a3 
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString();
+          :}
+
+         |TABLE4:a1 tda:a2         tdc:a3 
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString();
+          :}
+         |TABLE4:a1 tha:a2  TEXTO:a3  thc:a4 
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString();
+          :}
+         |TABLE4:a1 tda:a2  TEXTO:a3  tdc:a4 
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString();
+          :}
+
+;
+
+P::= menor:a1 p:a2 ETIQUETAS:a3 mayor:a4  TEXTO:a5  menor:a6 div:a7 p:a8 mayor:a9
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
+          :}
+    |menor:a1 p:a2           mayor:a3  TEXTO:a4  menor:a5 div:a6 p:a7 mayor:a8
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
+          :}
+    |menor:a1 p:a2 ETIQUETAS:a3 mayor:a4         menor:a5 div:a6 p:a7 mayor:a8
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
+          :}
+    |menor:a1 p:a2           mayor:a4         menor:a5 div:a6 p:a7 mayor:a8         
+         {:
+             RESULT=a1.toString()+a2.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
+          :}
+;
+
+H::= menor:a1 h1:a2 ETIQUETAS:a3 mayor:a4  TEXTO:a5  menor:a6 div:a7 h1:a8 mayor:a9
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
+          :}
+    |menor:a1 h1:a2              mayor:a3  TEXTO:a5  menor:a6 div:a7 h1:a8 mayor:a9
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
+          :}
+    |menor:a1 h1:a2 ETIQUETAS:a3 mayor:a4            menor:a5 div:a6 h1:a7 mayor:a8
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
+          :}
+    |menor:a1 h1:a2              mayor:a3            menor:a4 div:a5 h1:a6 mayor:a7
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString();
+          :}
+    |menor:a1 h2:a2 ETIQUETAS:a3 mayor:a4  TEXTO:a5  menor:a6 div:a7 h2:a8 mayor:a9
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
+          :}
+    |menor:a1 h2:a2              mayor:a3  TEXTO:a4  menor:a5 div:a6 h2:a7 mayor:a8
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
+          :}
+    |menor:a1 h2:a2 ETIQUETAS:a3 mayor:a4            menor:a5 div:a6 h2:a7 mayor:a8
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
+          :}
+    |menor:a1 h2:a2              mayor:a3            menor:a4 div:a5 h2:a6 mayor:a7
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString();
+          :}
+    |menor:a1 h3:a2 ETIQUETAS:a3 mayor:a4  TEXTO:a5  menor:a6 div:a7 h3:a8 mayor:a9
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
+          :}
+    |menor:a1 h3:a2              mayor:a3  TEXTO:a4  menor:a5 div:a6 h3:a7 mayor:a8
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
+          :}
+    |menor:a1 h3:a2 ETIQUETAS:a3 mayor:a4            menor:a5 div:a6 h3:a7 mayor:a8
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
+          :}
+    |menor:a1 h3:a2              mayor:a3            menor:a4 div:a5 h3:a6 mayor:a7
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString();
+          :}
+    |menor:a1 h4:a2 ETIQUETAS:a3 mayor:a4  TEXTO:a5  menor:a6 div:a7 h4:a8 mayor:a9
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
+          :}
+    |menor:a1 h4:a2              mayor:a3  TEXTO:a4  menor:a5 div:a6 h4:a7 mayor:a8
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
+          :}
+    |menor:a1 h4:a2 ETIQUETAS:a3 mayor:a4            menor:a5 div:a6 h4:a7 mayor:a8
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
+          :}
+    |menor:a1 h4:a2              mayor:a3            menor:a4 div:a5 h4:a6 mayor:a7
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString();
+          :}
+    |menor:a1 h5:a2 ETIQUETAS:a3 mayor:a4  TEXTO:a5  menor:a6 div:a7 h5:a8 mayor:a9
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
+          :}
+    |menor:a1 h5:a2              mayor:a3  TEXTO:a4  menor:a5 div:a6 h5:a7 mayor:a8
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
+          :}
+    |menor:a1 h5:a2 ETIQUETAS:a3 mayor:a4            menor:a5 div:a6 h5:a7 mayor:a8
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
+          :}
+    |menor:a1 h5:a2              mayor:a3            menor:a4 div:a5 h5:a6 mayor:a7
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString();
+          :}
+    |menor:a1 h6:a2 ETIQUETAS:a3 mayor:a4  TEXTO:a5  menor:a6 div:a7 h6:a8 mayor:a9
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
+          :}
+    |menor:a1 h6:a2              mayor:a3  TEXTO:a4  menor:a5 div:a6 h6:a7 mayor:a8
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
+          :}
+    |menor:a1 h6:a2 ETIQUETAS:a3 mayor:a4            menor:a5 div:a6 h6:a7 mayor:a8
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
+          :}
+    |menor:a1 h6:a2              mayor:a3            menor:a4 div:a5 h6:a6 mayor:a7
+          {:
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString();
+          :}
+;
+
+TEXTO::= TEXTO TEXTO1:a1
+            {:
+                RESULT=a1.toString();
+            :}
+        |TEXTO1:a1
+            {:
+                RESULT=a1.toString();
+            :}
+;
+
+TRBODY::= TEXTO:a1 
+            {:
+                RESULT=a1.toString();
+            :}
+         |SENTENCIAS:a1
+            {:
+                RESULT=a1.toString();
+            :}
+;
+
+TEXTO1::= id:a1
+            {:
+                RESULT=a1.toString();
+            :}
+        |cadena:a1
+            {:
+                RESULT=a1.toString();
+            :}
+        |caracter:a1
+            {:
+                RESULT=a1.toString();
+            :}
+        |dolar:a1 dolar:a2 SENTENCIAS:a3 dolar:a4 dolar:a5
+                    {:
+                        RESULT=a3.toString();
+                    :}
+;
+
+SENTENCIAS::= SENTENCIAS SENTENCIAS1:a3
+                    {:
+                        RESULT=a3.toString();
+                    :}
+             |SENTENCIAS1:a3
+                    {:
+                        RESULT=a3.toString();
+                    :}
+;
+
+SENTENCIAS1::= print:a1 para:a2 EXPR:a3 parc:a4 ptoYcoma:a5
+                    {:
+                        RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString();
+                    :}
+               |print:a1 para:a2 CONDICION:a3 parc:a4 ptoYcoma:a5
+                    {:
+                        RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString();
+                    :}
+               |TIPODATOS:a1 VARIABLES:a2 ptoYcoma:a3
+                    {:
+                        RESULT=a1.toString()+a2.toString()+a3.toString();
+                    :}
+               |VARIABLES:a1 ptoYcoma:a2
+                    {:
+                        RESULT=a1.toString()+a2.toString();
+                    :}
+               |id:a1 masmas:a2 ptoYcoma:a3
+                    {:
+                        RESULT=a1.toString()+a2.toString()+a3.toString();
+                    :}
+               |id:a1 menosmenos:a2 ptoYcoma:a3
+                    {:
+                        RESULT=a1.toString()+a2.toString()+a3.toString();
+                    :}
+               |id:a1 asignmas:a2 EXPR:a3 ptoYcoma
+                    {:
+                        RESULT=a1.toString()+a2.toString()+a3.toString();
+                    :}
+               |id:a1 asignmenos:a2 EXPR:a3 ptoYcoma
+                    {:
+                        RESULT=a1.toString()+a2.toString()+a3.toString();
+                    :}
+               |id:a1 asignpor:a2 EXPR:a3 ptoYcoma
+                    {:
+                        RESULT=a1.toString()+a2.toString()+a3.toString();
+                    :}
+               |RESULT:a1 ptoYcoma:a2
+                    {:
+                        RESULT=a1.toString()+a2.toString();
+                    :}
+;
+
+RESULT::= result:r pto:p id:id 
+            {:
+                RESULT=r.toString()+p.toString()+id.toString();
+            :}
+         |result:r pto:p id:id cora:c num corc pto id 
+            {:
+                RESULT=r.toString()+p.toString()+id.toString()+c.toString();
+            :}
+         |result:r pto:pto1 id:id1 pto:pto2 id:id2 
+            {:
+                RESULT=r.toString()+pto1.toString()+id1.toString()+pto2.toString()+id2.toString();
+            :}
+;
+
+VARIABLES::= VARIABLES:a1 coma:a2 id:a3     
+            {:
+                RESULT=a1.toString()+a2.toString()+a3.toString();
+            :}                                     
+            |VARIABLES:a1 coma:a2 id:a3 EXPR:a4 
+            {:
+                RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString();
+            :}   
+            |VARIABLES:a1 coma:a2 id:a3 asignacion:a4 EXPR:a5
+            {:
+                RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString();
+            :}   
+            |VARIABLES:a1 coma:a2 id:a3 asignacion:a4 RESULT:a5      
+            {:
+                RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString();
+            :}                             
+            |VARIABLES:a1 coma:a2 id:a3 asignacion:a4 CONDICION:a5
+            {:
+                RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString();
+            :}                   
+            |id:a1   
+            {:
+                RESULT=a1.toString();
+            :}                                                            
+            |id:a1  EXPR:a2
+            {:
+                RESULT=a1.toString()+a2.toString();
+            :}   
+            |id:a1 asignacion:a2 EXPR:a3
+            {:
+                RESULT=a1.toString()+a2.toString()+a3.toString();
+            :}   
+            |id:a1 asignacion:a2 CONDICION:a3
+            {:
+                RESULT=a1.toString()+a2.toString()+a3.toString();
+            :}  
+            |id:a1 asignacion:a2 RESULT:a3
+            {:
+                RESULT=a1.toString()+a2.toString()+a3.toString();
+            :}  
+;
+
+CONDICION::= EXPR:a mayor:m EXPR:b
                 {:
-                  RESULT="";
-                :}
+                    String a1 = (String) a;
+                    char rs1 = a1.charAt(0);
+            
+                    String a2 = (String) b;
+                    char rs2 = a2.charAt(0);
+
+                    if (Character.isDigit(rs1) && Character.isDigit(rs2)) {
+                        double valor1 = Double.parseDouble((String) a);
+                        double valor2 = Double.parseDouble((String) b);
+                        if (valor1 > valor2) {
+                            String r = "true";
+                            System.out.println("El resultado de " + a + m + b + "=" + r);
+                            RESULT = String.valueOf(r);
+                        }else {
+                            String r = "false";
+                            System.out.println("El resultado de " + a + m + b + "=" + r);
+                            RESULT = String.valueOf(r);
+                        }
+                    }else {
+                        RESULT=a1+m+a2;
+                        System.out.println("Error Semantico");
+                     }
+               :}
+            |EXPR:a menor:m EXPR:b
+                {:
+                    String a1 = (String) a;
+                    char rs1 = a1.charAt(0);
+            
+                    String a2 = (String) b;
+                    char rs2 = a2.charAt(0);
+
+                    if (Character.isDigit(rs1) && Character.isDigit(rs2)) {
+                        double valor1 = Double.parseDouble((String) a);
+                        double valor2 = Double.parseDouble((String) b);
+                        if (valor1 < valor2) {
+                            String r = "true";
+                            System.out.println("El resultado de " + a + m + b + "<" + r);
+                            RESULT = String.valueOf(r);
+                        }else {
+                            String r = "false";
+                            System.out.println("El resultado de " + a + m + b + "<" + r);
+                            RESULT = String.valueOf(r);
+                        }
+                    }else {
+                        RESULT=a1+m+a2;
+                        System.out.println("Error Semantico");
+                     }
+               :}
+            |EXPR:a mayorQ:m EXPR:b
+               {:
+                    String a1 = (String) a;
+                    char rs1 = a1.charAt(0);
+            
+                    String a2 = (String) b;
+                    char rs2 = a2.charAt(0);
+
+                    if (Character.isDigit(rs1) && Character.isDigit(rs2)) {
+                        double valor1 = Double.parseDouble((String) a);
+                        double valor2 = Double.parseDouble((String) b);
+                        if (valor1 >= valor2) {
+                            String r = "true";
+                            System.out.println("El resultado de " + a + m + b + ">=" + r);
+                            RESULT = String.valueOf(r);
+                        }else {
+                            String r = "false";
+                            System.out.println("El resultado de " + a + m + b + ">=" + r);
+                            RESULT = String.valueOf(r);
+                        }
+                    }else {
+                        RESULT=a1+m+a2;
+                        System.out.println("Error Semantico");
+                     }
+               :}
+            |EXPR:a menorQ:m EXPR:b
+                {:
+                    String a1 = (String) a;
+                    char rs1 = a1.charAt(0);
+            
+                    String a2 = (String) b;
+                    char rs2 = a2.charAt(0);
+
+                    if (Character.isDigit(rs1) && Character.isDigit(rs2)) {
+                        double valor1 = Double.parseDouble((String) a);
+                        double valor2 = Double.parseDouble((String) b);
+                        if (valor1 <= valor2) {
+                            String r = "true";
+                            System.out.println("El resultado de " + a + m + b + "<=" + r);
+                            RESULT = String.valueOf(r);
+                        }else {
+                            String r = "false";
+                            System.out.println("El resultado de " + a + m + b + "<=" + r);
+                            RESULT = String.valueOf(r);
+                        }
+                    }else {
+                        RESULT=a1+m+a2;
+                        System.out.println("Error Semantico");
+                     }
+               :}
+            |EXPR:a igual:m EXPR:b
+                {:
+                    String a1 = (String) a;
+                    char rs1 = a1.charAt(0);
+            
+                    String a2 = (String) b;
+                    char rs2 = a2.charAt(0);
+
+                    if (Character.isDigit(rs1) && Character.isDigit(rs2)) {
+                        double valor1 = Double.parseDouble((String) a);
+                        double valor2 = Double.parseDouble((String) b);
+                        if (valor1 == valor2) {
+                            String r = "true";
+                            System.out.println("El resultado de " + a + m + b + "==" + r);
+                            RESULT = String.valueOf(r);
+                        }else {
+                            String r = "false";
+                            System.out.println("El resultado de " + a + m + b + "==" + r);
+                            RESULT = String.valueOf(r);
+                        }
+                    }else {
+                        RESULT=a1+m+a2;
+                        System.out.println("Error Semantico");
+                     }
+               :}
+            |EXPR:a distinto:m EXPR:b
+                {:
+                    String a1 = (String) a;
+                    char rs1 = a1.charAt(0);
+            
+                    String a2 = (String) b;
+                    char rs2 = a2.charAt(0);
+
+                    if (Character.isDigit(rs1) && Character.isDigit(rs2)) {
+                        double valor1 = Double.parseDouble((String) a);
+                        double valor2 = Double.parseDouble((String) b);
+                        if (valor1 != valor2) {
+                            String r = "true";
+                            System.out.println("El resultado de " + a + m + b + "!=" + r);
+                            RESULT = String.valueOf(r);
+                        }else {
+                            String r = "false";
+                            System.out.println("El resultado de " + a + m + b + "!=" + r);
+                            RESULT = String.valueOf(r);
+                        }
+                    }else {
+                        RESULT=a1+m+a2;
+                        System.out.println("Error Semantico");
+                     }
+               :}
             |EXPR mod EXPR
                 {:
                   RESULT="";
@@ -222,42 +637,218 @@ CONDICION::= EXPR mayor EXPR
                 :}
 ;
 
-ETIQUETAS::= ETIQUETAS ETIQUETAS1
-            |ETIQUETAS1
+ETIQUETAS::= ETIQUETAS ETIQUETAS1:a1
+                {:
+                  RESULT=a1.toString();
+                :}
+            |ETIQUETAS1:a1
+                {:
+                  RESULT=a1.toString();
+                :}
 ;
 
-ETIQUETAS1::=COLOR_ETIQUETA
-          |ALIGN
-          |FUENTES
+ETIQUETAS1::=COLOR_ETIQUETA:a1
+                {:
+                  RESULT=a1.toString();
+                :}
+          |ALIGN:a1
+                {:
+                  RESULT=a1.toString();
+                :}
+          |FUENTES:a1
+                {:
+                  RESULT=a1.toString();
+                :}
 ;
 
-COLOR_ETIQUETA::= COLOR_ETIQUETA1 asignacion cadena
+COLOR_ETIQUETA::= COLOR_ETIQUETA1:a1 asignacion:a2 cadena:a3
+                {:
+                  RESULT=a1.toString()+a2.toString()+a3.toString();
+                :}
 ;
 
-COLOR_ETIQUETA1::= color
-                  |textocolor
+COLOR_ETIQUETA1::= color:a1
+                {:
+                  RESULT=a1.toString();
+                :}
+                  |textocolor:a1
+                {:
+                  RESULT=a1.toString();
+                :}
 ;
 
-ALIGN::=align asignacion cadena
+ALIGN::=align:a1 asignacion:a2 cadena:a3
+                    {:
+                        RESULT=a1.toString()+a2.toString()+a3.toString();
+                    :}
 ;
 
-FUENTES::= font asignacion cadena
+FUENTES::= font:a1 asignacion:a2 cadena:a3
+                    {:
+                        RESULT=a1.toString()+a2.toString()+a3.toString();
+                    :}
 ;
 
-EXPR::= EXPR:e mas:m EXPR:ex    
-       |EXPR:e menos:m EXPR:ex  
-       |EXPR:e por:p EXPR:ex 
-       |EXPR:e div:d EXPR:ex  
-       |menos:e EXPR:ex    
-       |num:e               
-       |id:id                 
-       |cadena:c            
-       |decimal:d             
-       |caracter:c
-       |truee:t              
-       |falsee:f              
-       |para:pa EXPR:e parc:pc
-;
+EXPR::= EXPR:a mas:m EXPR:b
+        {:
+           String a1 = (String) a;
+           char rs1 = a1.charAt(0);
+
+           String a2 = (String) b;
+           char rs2 = a2.charAt(0);
+
+           if (Character.isDigit(rs1) && Character.isDigit(rs2)) {
+                double valor1 = Double.parseDouble((String) a);
+                double valor2 = Double.parseDouble((String) b);
+                if (valor1 % 1 == 0 && valor2 % 1 == 0) {
+                      int r = (int) (valor1 + valor2);
+                      System.out.println("El resultado de " + a + m + b + "=" + r);
+                      RESULT = String.valueOf(r);
+                }else if((valor1 % 1 != 0 && valor2 % 1 == 0)|| (valor1 % 1 == 0 && valor2 % 1 != 0)){
+                      Double r = (valor1 + valor2);
+                      System.out.println("El resultado de " + a + m + b + "=" + r);
+                      RESULT = String.valueOf(r);
+                }
+           }else if ((!Character.isDigit(rs1) && Character.isDigit(rs2))|| (Character.isDigit(rs1) && !Character.isDigit(rs2))|| (!Character.isDigit(rs1) && !Character.isDigit(rs2))){
+                    String valor1=(String)a;
+                    String valor2=(String)b;
+                    String r= valor1+valor2;
+                    r = r.replaceAll("\"", "");
+                    System.out.println("El resultado de " + a + m + b + "= " + r);
+                    RESULT=String.valueOf(r);
+           }else {
+                                    System.out.println("horror");
+           }
+
+        :}    
+       |EXPR:a menos:m EXPR:b
+        {:
+           String a1 = (String) a;
+           char rs1 = a1.charAt(0);
+
+           String a2 = (String) b;
+           char rs2 = a2.charAt(0);
+
+           if (Character.isDigit(rs1) && Character.isDigit(rs2)) {
+                double valor1 = Double.parseDouble((String) a);
+                double valor2 = Double.parseDouble((String) b);
+                if (valor1 % 1 == 0 && valor2 % 1 == 0) {
+                      int r = (int) (valor1 - valor2);
+                      System.out.println("El resultado de " + a + m + b + "=" + r);
+                      RESULT = String.valueOf(r);
+                }else if((valor1 % 1 != 0 && valor2 % 1 == 0)|| (valor1 % 1 == 0 && valor2 % 1 != 0)||((valor1 % 1 != 0 && valor2 % 1 != 0))){
+                      Double r = (valor1 - valor2);
+                      System.out.println("El resultado de " + a + m + b + "=" + r);
+                      RESULT = String.valueOf(r);
+                }
+           }else if ((!Character.isDigit(rs1) && Character.isDigit(rs2))|| Character.isDigit(rs1) && !Character.isDigit(rs2)){
+                    String valor1=(String)a;
+                    String valor2=(String)b;
+                    String r= valor1+"-"+valor2;
+                    System.out.println("No es posible restar con Strings " + a + m + b + "= " + r);
+                    RESULT=String.valueOf(r);
+           }else {
+                                    System.out.println("horror");
+           }
+
+
+        :}
+       |EXPR:a por:m EXPR:b
+        {:
+           String a1 = (String) a;
+           char rs1 = a1.charAt(0);
+
+           String a2 = (String) b;
+           char rs2 = a2.charAt(0);
+
+           if (Character.isDigit(rs1) && Character.isDigit(rs2)) {
+                double valor1 = Double.parseDouble((String) a);
+                double valor2 = Double.parseDouble((String) b);
+                if (valor1 % 1 == 0 && valor2 % 1 == 0) {
+                      int r = (int) (valor1 * valor2);
+                      System.out.println("El resultado de " + a + m + b + "=" + r);
+                      RESULT = String.valueOf(r);
+                }else if((valor1 % 1 != 0 && valor2 % 1 == 0)|| (valor1 % 1 == 0 && valor2 % 1 != 0)||((valor1 % 1 != 0 && valor2 % 1 != 0))){
+                      Double r = (valor1 * valor2);
+                      System.out.println("El resultado de " + a + m + b + "=" + r);
+                      RESULT = String.valueOf(r);
+                }
+           }else if ((!Character.isDigit(rs1) && Character.isDigit(rs2))|| Character.isDigit(rs1) && !Character.isDigit(rs2)){
+                    String valor1=(String)a;
+                    String valor2=(String)b;
+                    String r= valor1+"*"+valor2;
+                    System.out.println("No es posible restar con Strings " + a + m + b + "= " + r);
+                    RESULT=String.valueOf(r);
+           }else {
+                  System.out.println("horror");
+           }
+        :} 
+       |EXPR:a div:m EXPR:b
+        {:
+           String a1 = (String) a;
+           char rs1 = a1.charAt(0);
+
+           String a2 = (String) b;
+           char rs2 = a2.charAt(0);
+
+           if (Character.isDigit(rs1) && Character.isDigit(rs2)) {
+                double valor1 = Double.parseDouble((String) a);
+                double valor2 = Double.parseDouble((String) b);
+                if (valor1 % 1 == 0 && valor2 % 1 == 0) {
+                      int r = (int) (valor1 / valor2);
+                      System.out.println("El resultado de " + a + m + b + "=" + r);
+                      RESULT = String.valueOf(r);
+                }else if((valor1 % 1 != 0 && valor2 % 1 == 0)|| (valor1 % 1 == 0 && valor2 % 1 != 0)||((valor1 % 1 != 0 && valor2 % 1 != 0))){
+                      Double r = (valor1 / valor2);
+                      System.out.println("El resultado de " + a + m + b + "=" + r);
+                      RESULT = String.valueOf(r);
+                }
+           }else if ((!Character.isDigit(rs1) && Character.isDigit(rs2))|| Character.isDigit(rs1) && !Character.isDigit(rs2)){
+                    String valor1=(String)a;
+                    String valor2=(String)b;
+                    String r= valor1+"/"+valor2;
+                    System.out.println("No es posible restar con Strings " + a + m + b + "= " + r);
+                    RESULT=String.valueOf(r);
+           }else {
+                  System.out.println("horror");
+           }
+        :}  
+       |menos:e EXPR:a   
+         {:
+          RESULT = "-"+a.toString(); 
+        :} 
+       |num:a
+        {:
+          RESULT = a.toString(); 
+        :}
+       |id:a 
+        {:
+          RESULT = a.toString(); 
+        :}               
+       |cadena:a
+        {:
+          RESULT = a.toString(); 
+        :}           
+       |decimal:a   
+        {:
+          RESULT = a.toString(); 
+        :}          
+       |caracter:a
+        {:
+          RESULT = a.toString(); 
+        :}   
+       |truee:a   
+         {:
+          RESULT = a.toString(); 
+        :}              
+       |falsee:a
+        {:
+          RESULT = a.toString(); 
+        :}                 
+       |para:pa EXPR:a parc:pc
+        {:
+          RESULT =a.toString(); 
+        :}   ;
 
 TIPODATOS::= intt:t
                {:RESULT=t;:}
@@ -269,7 +860,9 @@ TIPODATOS::= intt:t
                {:RESULT=t;:} 
             |doublee:t
                {:RESULT=t;:} 
-            |floaat
+            |floaat:t
+               {:RESULT=t;:} 
+
 ;
 
 COLORES::= rojo

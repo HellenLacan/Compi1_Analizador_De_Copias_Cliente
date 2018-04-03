@@ -5,8 +5,13 @@
  */
 package compi1_usuario;
 
+import java.awt.BorderLayout;
+import java.awt.Toolkit;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
@@ -14,6 +19,11 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -21,10 +31,15 @@ import java.util.logging.Logger;
  */
 public class FrmPrincipal extends javax.swing.JFrame {
 
+    Archivo miArchivo = new Archivo();
+    JEditorPane nuevaHoja;
+
     /**
      * Creates new form FrmPrincipal
      */
     public FrmPrincipal() {
+        this.setLayout(null);
+
         initComponents();
     }
 
@@ -37,6 +52,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Escritorio = new javax.swing.JDesktopPane();
+        jPanel1 = new javax.swing.JPanel();
         PanelPest = new javax.swing.JTabbedPane();
         Panel1 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -44,17 +61,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         ListCompoL = new javax.swing.JList<>();
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        listProducciones = new javax.swing.JList<>();
         lblProducciones = new javax.swing.JLabel();
-        Graficas = new javax.swing.JButton();
-        jButtonAutApila = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        JeditorPaneimagen = new javax.swing.JEditorPane();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
-        lblProducciones1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         MenuAbrir = new javax.swing.JMenuItem();
@@ -86,23 +93,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
         Panel1.setLayout(Panel1Layout);
         Panel1Layout.setHorizontalGroup(
             Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(Panel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Panel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 514, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         Panel1Layout.setVerticalGroup(
             Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Panel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
         );
 
         PanelPest.addTab("tab1", Panel1);
-
-        getContentPane().add(PanelPest);
-        PanelPest.setBounds(10, 0, 500, 580);
 
         ListCompoL.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -111,91 +112,71 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(ListCompoL);
 
-        getContentPane().add(jScrollPane2);
-        jScrollPane2.setBounds(550, 60, 160, 180);
-
         jLabel1.setFont(new java.awt.Font("Tempus Sans ITC", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 204, 204));
         jLabel1.setText("Componentes Lexicos");
         jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 204, 204)));
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(550, 20, 160, 40);
-
-        listProducciones.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                listProduccionesMouseClicked(evt);
-            }
-        });
-        jScrollPane3.setViewportView(listProducciones);
-
-        getContentPane().add(jScrollPane3);
-        jScrollPane3.setBounds(550, 370, 160, 210);
 
         lblProducciones.setFont(new java.awt.Font("Tempus Sans ITC", 1, 14)); // NOI18N
         lblProducciones.setForeground(new java.awt.Color(0, 204, 204));
         lblProducciones.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblProducciones.setText("Automata");
         lblProducciones.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 204, 204)));
-        getContentPane().add(lblProducciones);
-        lblProducciones.setBounds(760, 440, 150, 40);
 
-        Graficas.setFont(new java.awt.Font("Tempus Sans ITC", 1, 18)); // NOI18N
-        Graficas.setText("Graficar");
-        Graficas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                GraficasActionPerformed(evt);
-            }
-        });
-        getContentPane().add(Graficas);
-        Graficas.setBounds(560, 260, 130, 50);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(PanelPest, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(57, 57, 57)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(72, 72, 72)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblProducciones, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(92, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(39, 39, 39)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
+                .addComponent(lblProducciones, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 12, Short.MAX_VALUE)
+                .addComponent(PanelPest, javax.swing.GroupLayout.PREFERRED_SIZE, 568, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
 
-        jButtonAutApila.setFont(new java.awt.Font("Tempus Sans ITC", 1, 18)); // NOI18N
-        jButtonAutApila.setText("Automata");
-        jButtonAutApila.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAutApilaActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButtonAutApila);
-        jButtonAutApila.setBounds(770, 520, 130, 50);
+        Escritorio.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton1);
-        jButton1.setBounds(1000, 540, 73, 23);
+        javax.swing.GroupLayout EscritorioLayout = new javax.swing.GroupLayout(Escritorio);
+        Escritorio.setLayout(EscritorioLayout);
+        EscritorioLayout.setHorizontalGroup(
+            EscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(EscritorioLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(37, Short.MAX_VALUE))
+        );
+        EscritorioLayout.setVerticalGroup(
+            EscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, EscritorioLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
 
-        jScrollPane1.setViewportView(JeditorPaneimagen);
-
-        getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(770, 30, 520, 360);
-
-        jList1.setFont(new java.awt.Font("Tempus Sans ITC", 1, 14)); // NOI18N
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Automata A Pila", " " };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jList1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jList1MouseClicked(evt);
-            }
-        });
-        jScrollPane5.setViewportView(jList1);
-
-        getContentPane().add(jScrollPane5);
-        jScrollPane5.setBounds(760, 480, 150, 40);
-
-        lblProducciones1.setFont(new java.awt.Font("Tempus Sans ITC", 1, 14)); // NOI18N
-        lblProducciones1.setForeground(new java.awt.Color(0, 204, 204));
-        lblProducciones1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblProducciones1.setText("Producciones");
-        lblProducciones1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 204, 204)));
-        getContentPane().add(lblProducciones1);
-        lblProducciones1.setBounds(550, 330, 160, 40);
+        getContentPane().add(Escritorio);
+        Escritorio.setBounds(10, 10, 870, 580);
 
         jMenu1.setBackground(new java.awt.Color(24, 240, 240));
         jMenu1.setText("Archivo");
@@ -336,17 +317,55 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         setJMenuBar(jMenuBar1);
 
-        pack();
+        setBounds(0, 0, 908, 657);
     }// </editor-fold>//GEN-END:initComponents
 
     private void MenuAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuAbrirActionPerformed
+        //verifica si el cuadro de texto esta vacio
+        if (txtCont.getText().length() <= 0) {
+            abrirArchivo();
+        } else if ((txtCont.getText().length() > 0)) {
+            nuevoArchivo();
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException ex) {
+                //   Logger.getLogger(Form_Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            abrirArchivo();
+        }
 
     }//GEN-LAST:event_MenuAbrirActionPerformed
 
+    public void nuevoArchivo() {
+
+//        int answer = JOptionPane.showConfirmDialog(null, "¿Desea Guardar los cambios?", " EcysWeb ", JOptionPane.YES_NO_OPTION, 2, icono);
+//        if (answer == JOptionPane.YES_OPTION) {
+//            try {
+//                if (miArchivo.getPath() != null) {
+//                    guardar();
+//                    limpiarContenido();
+//                } else {
+//                    GuardarComo();
+//                    limpiarContenido();
+//                }
+//            } catch (Exception e) {
+//                System.out.println(e);
+//            }
+//        } else if (answer == JOptionPane.NO_OPTION) {
+//            txtCont.setText("");
+//            txtCont.setText(" ");
+//            miArchivo.setContenido("");
+//        }
+    }
+
+
     private void MenuNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuNuevoActionPerformed
+        crearPag();
     }//GEN-LAST:event_MenuNuevoActionPerformed
 
     private void MenuGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuGuardarActionPerformed
+        guardar();
+
     }//GEN-LAST:event_MenuGuardarActionPerformed
 
     private void MenuGuardarCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuGuardarCActionPerformed
@@ -356,18 +375,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_MenuSalirActionPerformed
 
     private void MenuAnalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuAnalizarActionPerformed
-        try {
-            String number, temp;
-            Socket s = new Socket("127.0.0.1",1342);
-            Scanner sc1 = new Scanner(s.getInputStream());
-            PrintStream p= new PrintStream(s.getOutputStream());
-            p.println("C:\\Users\\Hellen\\Desktop\\Proyecto1;C:\\Users\\Hellen\\Desktop\\Proyecto2");
-            temp=sc1.nextLine();
-            System.out.println(temp);
-        } catch (IOException ex) {
-            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+       JinternalAnalizador p1 = new JinternalAnalizador();
+       p1.setSize(863,350);
+       p1.setLocation(4,0);
+       Escritorio.add(p1);
+       p1.show();
+ 
     }//GEN-LAST:event_MenuAnalizarActionPerformed
 
     private void MenuReporteTokensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuReporteTokensActionPerformed
@@ -397,31 +410,87 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
 
-    private void GraficasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GraficasActionPerformed
-
-    }//GEN-LAST:event_GraficasActionPerformed
-
-    private void jButtonAutApilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAutApilaActionPerformed
-    }//GEN-LAST:event_jButtonAutApilaActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void ListCompoLMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ListCompoLMouseClicked
 
         // TODO add your handling code here:
     }//GEN-LAST:event_ListCompoLMouseClicked
 
-    private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
-     }//GEN-LAST:event_jList1MouseClicked
-
-    private void listProduccionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listProduccionesMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_listProduccionesMouseClicked
-
     /**
      * @param args the command line arguments
      */
+    
+     public JEditorPane crearPag() {
+        JPanel pag = new JPanel();
+        pag.setLayout(null);
+        JEditorPane nv = new JEditorPane();
+        nv.setBounds(15, 15, 460, 515);
+        nv.setVisible(true);
+        ImageIcon icon = new ImageIcon(this.getClass().getResource("salir.png"));
+
+        Panel1.add(nv);
+        pag.add(nv);
+        PanelPest.addTab("New", icon, pag, "Salir");
+        nuevaHoja = nv;
+        return nv;
+    }
+    
+    public void guardar() {
+        try (FileWriter fw = new FileWriter(miArchivo.getPath())) {
+            //Escribimos el texto en el fichero
+            fw.write(txtCont.getText());
+            miArchivo.setContenido(txtCont.getText());
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
+
+    public void abrirArchivo() {
+        //objeto que permite acceder al fichero
+        JFileChooser SelecArchivo = new JFileChooser();
+        FileNameExtensionFilter FiltExt = new FileNameExtensionFilter("Select File", "cp");
+        SelecArchivo.setFileFilter(FiltExt);
+
+        int seleccion = SelecArchivo.showOpenDialog(null);
+        //seleccionamos el archivo
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+
+            try {
+                //Selecciona la ruta del fichero
+                File archivo = SelecArchivo.getSelectedFile();
+                miArchivo.setPath(archivo.getAbsolutePath());
+                miArchivo.setNombre(archivo.getName());
+                miArchivo.setPathPadre(archivo.getParent());
+                leerArchivo(archivo);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    int contadorHojas = 0;
+
+    public void leerArchivo(File archivo) {
+        try (FileReader fr = new FileReader(archivo)) {
+            String cadena = "";
+            int valor = fr.read();
+            while (valor != -1) {
+                cadena = cadena + (char) valor;
+                valor = fr.read();
+            }
+
+            if (contadorHojas == 0) {
+                miArchivo.setContenido(cadena);
+                txtCont.setText(miArchivo.getContenido());
+                contadorHojas++;
+            } else {
+                nuevaHoja.setText(cadena);
+
+            }
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -465,8 +534,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Graficas;
-    private javax.swing.JEditorPane JeditorPaneimagen;
+    private javax.swing.JDesktopPane Escritorio;
     private javax.swing.JList<String> ListCompoL;
     private javax.swing.JMenuItem MenuAbrir;
     private javax.swing.JMenuItem MenuAnalizar;
@@ -482,27 +550,28 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu MenuUbiacion1;
     private javax.swing.JPanel Panel1;
     private javax.swing.JTabbedPane PanelPest;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButtonAutApila;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JLabel lblProducciones;
-    private javax.swing.JLabel lblProducciones1;
-    private javax.swing.JList<String> listProducciones;
     private javax.swing.JTextPane txtCont;
     // End of variables declaration//GEN-END:variables
+
+    public javax.swing.JPanel getjPanel1() {
+        return jPanel1;
+    }
+
+    public void setjPanel1(javax.swing.JPanel jPanel1) {
+        this.jPanel1 = jPanel1;
+    }
 
 }
