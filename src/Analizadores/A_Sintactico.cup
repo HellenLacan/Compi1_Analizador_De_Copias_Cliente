@@ -5,10 +5,10 @@ import java_cup.runtime.Symbol;
 import java.util.ArrayList;
 
 /**********************************  Codigo para el parser, variables, metodos **********************************/
-
 parser code
 {:
     public String resultado="";
+    static String html="";
 
     //Metodo al que se llama automaticamente ante algun error sintactico
     public void syntax_error(Symbol s)
@@ -40,7 +40,10 @@ parser code
 
 /************************************* Codigo para las acciones gramaticales *********************************/
 action code
-{::}
+{:
+        private String almacenarTexto="";
+
+:}
 
 /*************************************  2da Area: Declaraciones **************************************/
 //------> declaracion de terminales 
@@ -58,10 +61,10 @@ terminal izquierda, derecha, centrado, thc,tdc;
 terminal t1,t2,t3,t4,t5,t6,t7,t8,t9,t10, dolar,ctable;
 
 //------> declaracion de no terminales
-non terminal  INICIO,E,INICIO1,CUERPOHTML,TITLE, CUERPO_BODY, CUERPO_BODY1,BR,H;
+non terminal  INICIO,E,INICIO1,CUERPOHTML,TITLE, CUERPO_BODY, CUERPO_BODY1,BR,H, DIVHTML;
 non terminal HTML, BODY,COLORES, COLOR_ETIQUETA, COLOR_ETIQUETA1, TIPOS_ALIGN, NOMBRES_FUENTES,FUENTES,ETIQUETAS;
 non terminal ALIGN, ETIQUETAS1, TEXTO, TEXTO1,P,EXPR, PRINT, SENTENCIAS, SENTENCIAS1,TIPODATOS, VARIABLES, ASIGNACION_VAR;
-non terminal CONDICION, TABLE, TABLE1,TRBODY,TABLE2,TABLE3,TABLE4,TABLE5,TABLE6, RESULT;
+non terminal CONDICION, TABLE, TABLE1,TRBODY,TABLE2,TABLE3,TABLE4,TABLE5,TABLE6, RESULT,TITLE1, TITLE2;
 //----> precedencia de menor a mayor 
 precedence left mas, menos;
 precedence left por, div, and, or, not;
@@ -72,8 +75,8 @@ start with INICIO;
 
 /*************************************  23a area: Reglas Semanticas **************************************/
 
-INICIO::=INICIO1:a {: :};
-
+INICIO::=INICIO1:a {: System.out.println(a); :}
+;
 INICIO1::= menor:a1 html:a2 mayor:a3 CUERPOHTML:a4 
            {:
              RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString(); 
@@ -83,27 +86,47 @@ CUERPOHTML::=menor:a1 head:a2 mayor:a3  TITLE:a4 menor:a5 div:a6 head:a7 mayor:a
              {:
                 RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
              :}
+            |menor:a1 head:a2 mayor:a3  CUERPO_BODY:a4 menor:a5 div:a6 head:a7 mayor:a8 BODY:a9 
+             {:
+                RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
+             :}
+            |menor:a1 head:a2 mayor:a3  menor:a5 div:a6 head:a7 mayor:a8 BODY:a9 
+             {:
+                RESULT=a1.toString()+a2.toString()+a3.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
+             :}
 ;
 
-TITLE::= menor:a1 title:a2 mayor:a3 id:a4 menor:a5 div:a6 title:a7 mayor:a8
+TITLE::= menor:a1 title:a2 mayor:a3 CUERPO_BODY:a4 menor:a5 div:a6 title:a7 mayor:a8
           {:
-             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+"<br>"+a5.toString()+a6.toString()+a7.toString()+a8.toString();
           :}
 ;
 
 BODY::=  menor:a1 body:a2 mayor:a3 CUERPO_BODY:a4 menor:a5 div:a6 body:a7 mayor:a8 menor:a9 div:a10 html:a11 mayor:a12
           {:
-             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString()+a10.toString()+a11.toString()+a12.toString();
+             String css="<style> .colorazul{background-color:blue;} .colorrojo{background-color:red;}.coloramarillo{background-color:yellow;}.colorverde{background-color:green;}.colorgris{background-color:gray;}.coloranaranjado{background-color:#D35400;}.colormorado{background-color:purple;}</style>";
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString()+a10.toString()+a11.toString()+a12.toString()+css;
           :}
         |menor:a1 body:a2 mayor:a3             menor:a5 div:a6 body:a7 mayor:a8 menor:a9 div:a10 html:a11 mayor:a12
           {:
-             RESULT=a1.toString()+a2.toString()+a3.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString()+a10.toString()+a11.toString()+a12.toString();
-          :}  
+             String css="<style> .colorazul{background-color:blue;} .colorrojo{background-color:red;}.coloramarillo{background-color:yellow;}.colorverde{background-color:green;}.colorgris{background-color:gray;}.coloranaranjado{background-color:#D35400;}.colormorado{background-color:purple;}</style>";
+             RESULT=a1.toString()+a2.toString()+a3.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString()+a10.toString()+a11.toString()+a12.toString()+css;
+          :} 
+        |menor:a1 body:a2 ETIQUETAS:c mayor:a3 CUERPO_BODY:a4 menor:a5 div:a6 body:a7 mayor:a8 menor:a9 div:a10 html:a11 mayor:a12
+          {:
+             String css="<style> .colorazul{background-color:blue;} .colorrojo{background-color:red;}.coloramarillo{background-color:yellow;}.colorverde{background-color:green;}.colorgris{background-color:gray;}.coloranaranjado{background-color:#D35400;}.colormorado{background-color:purple;}</style>";
+             RESULT=a1.toString()+a2.toString()+ c.toString() +a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString()+a10.toString()+a11.toString()+a12.toString()+css;
+          :}
+        |menor:a1 body:a2 ETIQUETAS:c mayor:a3             menor:a5 div:a6 body:a7 mayor:a8 menor:a9 div:a10 html:a11 mayor:a12
+          {:
+             String css="<style> .colorazul{background-color:blue;} .colorrojo{background-color:red;}.coloramarillo{background-color:yellow;}.colorverde{background-color:green;}.colorgris{background-color:gray;}.coloranaranjado{background-color:#D35400;}.colormorado{background-color:purple;}</style>";
+             RESULT=a1.toString()+a2.toString()+ c.toString()+a3.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString()+a10.toString()+a11.toString()+a12.toString()+css;
+        :}   
 ;
 
-CUERPO_BODY::= CUERPO_BODY CUERPO_BODY1:a1
+CUERPO_BODY::= CUERPO_BODY:a1 CUERPO_BODY1:a2
                 {:
-                   RESULT=a1.toString();
+                   RESULT=a1.toString()+" "+a2.toString();
                 :}
               |CUERPO_BODY1:a1
                 {:
@@ -114,6 +137,18 @@ CUERPO_BODY::= CUERPO_BODY CUERPO_BODY1:a1
 CUERPO_BODY1::= menor:a1 br:a2 mayor:a3
                 {:
                    RESULT=a1.toString()+a2.toString()+a3.toString();           
+                :}
+               |menor:a1 hr:a2 mayor:a3
+                {:
+                   RESULT=a1.toString()+a2.toString()+a3.toString();           
+                :}
+               |menor:a1 div:a4 hr:a2 mayor:a3
+                {:
+                   RESULT=a1.toString()+a2.toString()+a3.toString();           
+                :}
+               |DIVHTML:a1
+                {:
+                   RESULT=a1.toString();           
                 :}
                |H:a1 
                 {:
@@ -127,6 +162,50 @@ CUERPO_BODY1::= menor:a1 br:a2 mayor:a3
                 {:
                    RESULT=a1.toString();           
                 :}         
+        |id:a1
+            {:
+                RESULT=a1.toString();
+            :}
+        |cadena:a1
+            {:
+                RESULT=a1.toString();
+            :}
+        |caracter:a1
+            {:
+                RESULT=a1.toString();
+            :}
+        |dolar:a1 dolar:a2 SENTENCIAS:a3 dolar:a4 dolar:a5
+                    {:
+                        RESULT=a3.toString();
+                    :}
+        |num:a1
+            {:
+                RESULT=a1.toString();
+            :}
+
+
+
+
+
+
+;
+
+DIVHTML::= menor:a1 divhtml:a2 ETIQUETAS:a3 mayor:a4 menor:a5 div divhtml:a6 mayor:a7 
+                {:
+                    RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString();
+                :}
+          |menor:a1 divhtml:a2 ETIQUETAS:a3 mayor:a4 CUERPO_BODY:a8 menor:a5 div divhtml:a6 mayor:a7 
+                 {:
+                    RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a8.toString()+a5.toString()+a6.toString()+a7.toString();
+                 :}
+          |menor:a1 divhtml:a2  mayor:a4 menor:a5 div divhtml:a6 mayor:a7 
+                {:
+                    RESULT=a1.toString()+a2.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString();
+                :}
+          |menor:a1 divhtml:a2  mayor:a4 CUERPO_BODY:a8 menor:a5 div divhtml:a6 mayor:a7 
+                {:
+                    RESULT=a1.toString()+a2.toString()+a4.toString()+a8.toString()+a5.toString()+a6.toString()+a7.toString();
+                :}
 ;
 
 TABLE::= menor:a1 table:a2 ETIQUETAS:a3 mayor:a4            ctable:a5 
@@ -147,9 +226,9 @@ TABLE::= menor:a1 table:a2 ETIQUETAS:a3 mayor:a4            ctable:a5
           :}
 ;
 
-TABLE1::= TABLE1 TABLE2:a1
+TABLE1::= TABLE1:a2 TABLE2:a1
                 {:
-                   RESULT=a1.toString();           
+                   RESULT=a2.toString()+a1.toString();           
                 :}  
          |TABLE2:a1
                 {:
@@ -175,11 +254,11 @@ TABLE4::= tha:a1        thc:a2
           {:
              RESULT=a1.toString()+a2.toString();
           :}
-         |tha:a1 TEXTO:a2  thc:a3 
+         |tha:a1 CUERPO_BODY:a2  thc:a3 
           {:
              RESULT=a1.toString()+a2.toString()+a3.toString();
           :}
-         |tda:a1 TEXTO:a2  tdc:a3 
+         |tda:a1 CUERPO_BODY:a2  tdc:a3 
           {:
              RESULT=a1.toString()+a2.toString()+a3.toString();
           :}
@@ -192,22 +271,22 @@ TABLE4::= tha:a1        thc:a2
           {:
              RESULT=a1.toString()+a2.toString()+a3.toString();
           :}
-         |TABLE4:a1 tha:a2  TEXTO:a3  thc:a4 
+         |TABLE4:a1 tha:a2  CUERPO_BODY:a3  thc:a4 
           {:
              RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString();
           :}
-         |TABLE4:a1 tda:a2  TEXTO:a3  tdc:a4 
+         |TABLE4:a1 tda:a2  CUERPO_BODY:a3  tdc:a4 
           {:
              RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString();
           :}
 
 ;
 
-P::= menor:a1 p:a2 ETIQUETAS:a3 mayor:a4  TEXTO:a5  menor:a6 div:a7 p:a8 mayor:a9
+P::= menor:a1 p:a2 ETIQUETAS:a3 mayor:a4  CUERPO_BODY:a5  menor:a6 div:a7 p:a8 mayor:a9
           {:
              RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
           :}
-    |menor:a1 p:a2           mayor:a3  TEXTO:a4  menor:a5 div:a6 p:a7 mayor:a8
+    |menor:a1 p:a2           mayor:a3  CUERPO_BODY:a4  menor:a5 div:a6 p:a7 mayor:a8
           {:
              RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
           :}
@@ -221,43 +300,43 @@ P::= menor:a1 p:a2 ETIQUETAS:a3 mayor:a4  TEXTO:a5  menor:a6 div:a7 p:a8 mayor:a
           :}
 ;
 
-H::= menor:a1 h1:a2 ETIQUETAS:a3 mayor:a4  TEXTO:a5  menor:a6 div:a7 h1:a8 mayor:a9
+H::= menor:a1 h1:a2 ETIQUETAS:a3 mayor:a4  CUERPO_BODY:a5  menor:a6 div:a7 h1:a8 mayor:a9
           {:
-             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
+             RESULT=a1.toString()+a2.toString()+" "+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
           :}
-    |menor:a1 h1:a2              mayor:a3  TEXTO:a5  menor:a6 div:a7 h1:a8 mayor:a9
+    |menor:a1 h1:a2              mayor:a3  CUERPO_BODY:a5  menor:a6 div:a7 h1:a8 mayor:a9
           {:
-             RESULT=a1.toString()+a2.toString()+a3.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
+             RESULT=a1.toString()+a2.toString()+" "+a3.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
           :}
     |menor:a1 h1:a2 ETIQUETAS:a3 mayor:a4            menor:a5 div:a6 h1:a7 mayor:a8
           {:
-             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
+             RESULT=a1.toString()+a2.toString()+" "+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
           :}
     |menor:a1 h1:a2              mayor:a3            menor:a4 div:a5 h1:a6 mayor:a7
           {:
-             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString();
+             RESULT=a1.toString()+a2.toString()+" "+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString();
           :}
-    |menor:a1 h2:a2 ETIQUETAS:a3 mayor:a4  TEXTO:a5  menor:a6 div:a7 h2:a8 mayor:a9
+    |menor:a1 h2:a2 ETIQUETAS:a3 mayor:a4  CUERPO_BODY:a5  menor:a6 div:a7 h2:a8 mayor:a9
           {:
-             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
+             RESULT=a1.toString()+a2.toString()+" "+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
           :}
-    |menor:a1 h2:a2              mayor:a3  TEXTO:a4  menor:a5 div:a6 h2:a7 mayor:a8
+    |menor:a1 h2:a2              mayor:a3  CUERPO_BODY:a4  menor:a5 div:a6 h2:a7 mayor:a8
           {:
-             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
+             RESULT=a1.toString()+a2.toString()+" "+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
           :}
     |menor:a1 h2:a2 ETIQUETAS:a3 mayor:a4            menor:a5 div:a6 h2:a7 mayor:a8
           {:
-             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
+             RESULT=a1.toString()+a2.toString()+" "+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
           :}
     |menor:a1 h2:a2              mayor:a3            menor:a4 div:a5 h2:a6 mayor:a7
           {:
-             RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString();
+             RESULT=a1.toString()+a2.toString()+" "+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString();
           :}
-    |menor:a1 h3:a2 ETIQUETAS:a3 mayor:a4  TEXTO:a5  menor:a6 div:a7 h3:a8 mayor:a9
+    |menor:a1 h3:a2 ETIQUETAS:a3 mayor:a4  CUERPO_BODY:a5  menor:a6 div:a7 h3:a8 mayor:a9
           {:
              RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
           :}
-    |menor:a1 h3:a2              mayor:a3  TEXTO:a4  menor:a5 div:a6 h3:a7 mayor:a8
+    |menor:a1 h3:a2              mayor:a3  CUERPO_BODY:a4  menor:a5 div:a6 h3:a7 mayor:a8
           {:
              RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
           :}
@@ -269,11 +348,11 @@ H::= menor:a1 h1:a2 ETIQUETAS:a3 mayor:a4  TEXTO:a5  menor:a6 div:a7 h1:a8 mayor
           {:
              RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString();
           :}
-    |menor:a1 h4:a2 ETIQUETAS:a3 mayor:a4  TEXTO:a5  menor:a6 div:a7 h4:a8 mayor:a9
+    |menor:a1 h4:a2 ETIQUETAS:a3 mayor:a4  CUERPO_BODY:a5  menor:a6 div:a7 h4:a8 mayor:a9
           {:
              RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
           :}
-    |menor:a1 h4:a2              mayor:a3  TEXTO:a4  menor:a5 div:a6 h4:a7 mayor:a8
+    |menor:a1 h4:a2              mayor:a3  CUERPO_BODY:a4  menor:a5 div:a6 h4:a7 mayor:a8
           {:
              RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
           :}
@@ -285,11 +364,11 @@ H::= menor:a1 h1:a2 ETIQUETAS:a3 mayor:a4  TEXTO:a5  menor:a6 div:a7 h1:a8 mayor
           {:
              RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString();
           :}
-    |menor:a1 h5:a2 ETIQUETAS:a3 mayor:a4  TEXTO:a5  menor:a6 div:a7 h5:a8 mayor:a9
+    |menor:a1 h5:a2 ETIQUETAS:a3 mayor:a4  CUERPO_BODY:a5  menor:a6 div:a7 h5:a8 mayor:a9
           {:
              RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
           :}
-    |menor:a1 h5:a2              mayor:a3  TEXTO:a4  menor:a5 div:a6 h5:a7 mayor:a8
+    |menor:a1 h5:a2              mayor:a3  CUERPO_BODY:a4  menor:a5 div:a6 h5:a7 mayor:a8
           {:
              RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
           :}
@@ -301,11 +380,11 @@ H::= menor:a1 h1:a2 ETIQUETAS:a3 mayor:a4  TEXTO:a5  menor:a6 div:a7 h1:a8 mayor
           {:
              RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString();
           :}
-    |menor:a1 h6:a2 ETIQUETAS:a3 mayor:a4  TEXTO:a5  menor:a6 div:a7 h6:a8 mayor:a9
+    |menor:a1 h6:a2 ETIQUETAS:a3 mayor:a4  CUERPO_BODY:a5  menor:a6 div:a7 h6:a8 mayor:a9
           {:
              RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString()+a9.toString();
           :}
-    |menor:a1 h6:a2              mayor:a3  TEXTO:a4  menor:a5 div:a6 h6:a7 mayor:a8
+    |menor:a1 h6:a2              mayor:a3  CUERPO_BODY:a4  menor:a5 div:a6 h6:a7 mayor:a8
           {:
              RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString()+a6.toString()+a7.toString()+a8.toString();
           :}
@@ -319,9 +398,9 @@ H::= menor:a1 h1:a2 ETIQUETAS:a3 mayor:a4  TEXTO:a5  menor:a6 div:a7 h1:a8 mayor
           :}
 ;
 
-TEXTO::= TEXTO TEXTO1:a1
+TEXTO::= TEXTO:a1 TEXTO1:a2
             {:
-                RESULT=a1.toString();
+                RESULT=a1.toString()+" "+a2.toString();
             :}
         |TEXTO1:a1
             {:
@@ -329,7 +408,8 @@ TEXTO::= TEXTO TEXTO1:a1
             :}
 ;
 
-TRBODY::= TEXTO:a1 
+
+TRBODY::= CUERPO_BODY:a1 
             {:
                 RESULT=a1.toString();
             :}
@@ -339,27 +419,9 @@ TRBODY::= TEXTO:a1
             :}
 ;
 
-TEXTO1::= id:a1
-            {:
-                RESULT=a1.toString();
-            :}
-        |cadena:a1
-            {:
-                RESULT=a1.toString();
-            :}
-        |caracter:a1
-            {:
-                RESULT=a1.toString();
-            :}
-        |dolar:a1 dolar:a2 SENTENCIAS:a3 dolar:a4 dolar:a5
+SENTENCIAS::= SENTENCIAS:a2 SENTENCIAS1:a3
                     {:
-                        RESULT=a3.toString();
-                    :}
-;
-
-SENTENCIAS::= SENTENCIAS SENTENCIAS1:a3
-                    {:
-                        RESULT=a3.toString();
+                        RESULT=a2.toString()+a3.toString();
                     :}
              |SENTENCIAS1:a3
                     {:
@@ -375,6 +437,11 @@ SENTENCIAS1::= print:a1 para:a2 EXPR:a3 parc:a4 ptoYcoma:a5
                     {:
                         RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString();
                     :}
+               |print:a1 para:a2 RESULT:a3 parc:a4 ptoYcoma:a5
+                    {:
+                        RESULT=a1.toString()+a2.toString()+a3.toString()+a4.toString()+a5.toString();
+                    :}
+
                |TIPODATOS:a1 VARIABLES:a2 ptoYcoma:a3
                     {:
                         RESULT=a1.toString()+a2.toString()+a3.toString();
@@ -395,7 +462,16 @@ SENTENCIAS1::= print:a1 para:a2 EXPR:a3 parc:a4 ptoYcoma:a5
                     {:
                         RESULT=a1.toString()+a2.toString()+a3.toString();
                     :}
+               |id:a1 asignmas:a2 RESULT:a3 ptoYcoma
+                    {:
+                        RESULT=a1.toString()+a2.toString()+a3.toString();
+                    :}
                |id:a1 asignmenos:a2 EXPR:a3 ptoYcoma
+                    {:
+                        RESULT=a1.toString()+a2.toString()+a3.toString();
+                    :}
+
+               |id:a1 asignmenos:a2 RESULT:a3 ptoYcoma
                     {:
                         RESULT=a1.toString()+a2.toString()+a3.toString();
                     :}
@@ -403,10 +479,16 @@ SENTENCIAS1::= print:a1 para:a2 EXPR:a3 parc:a4 ptoYcoma:a5
                     {:
                         RESULT=a1.toString()+a2.toString()+a3.toString();
                     :}
+
+               |id:a1 asignpor:a2 RESULT:a3 ptoYcoma
+                    {:
+                        RESULT=a1.toString()+a2.toString()+a3.toString();
+                    :}
                |RESULT:a1 ptoYcoma:a2
                     {:
                         RESULT=a1.toString()+a2.toString();
                     :}
+                |E
 ;
 
 RESULT::= result:r pto:p id:id 
@@ -637,9 +719,9 @@ CONDICION::= EXPR:a mayor:m EXPR:b
                 :}
 ;
 
-ETIQUETAS::= ETIQUETAS ETIQUETAS1:a1
+ETIQUETAS::= ETIQUETAS:a1 ETIQUETAS1:a2
                 {:
-                  RESULT=a1.toString();
+                  RESULT=a1.toString()+a2.toString();
                 :}
             |ETIQUETAS1:a1
                 {:
@@ -663,29 +745,77 @@ ETIQUETAS1::=COLOR_ETIQUETA:a1
 
 COLOR_ETIQUETA::= COLOR_ETIQUETA1:a1 asignacion:a2 cadena:a3
                 {:
-                  RESULT=a1.toString()+a2.toString()+a3.toString();
+                  if((a1.equals("textocolor"))&&(a3.equals("\"rojo\""))){
+                         RESULT=" style"+a2.toString()+"\"color:red\";";
+                      }else if((a1.equals("textocolor"))&& a3.equals("\"amarillo\"")){
+                         RESULT=" style"+a2.toString()+"\"color:yellow\";";
+
+                     }else if((a1.equals("textocolor"))&& a3.equals("\"azul\"")){
+                      RESULT=" style"+a2.toString()+"\"color:blue\";";
+
+                     }else if((a1.equals("textocolor"))&& a3.equals("\"verde\"")){
+                        RESULT=" style"+a2.toString()+"\"color:green\";";
+
+                     }else if((a1.equals("textocolor"))&& a3.equals("\"anaranjado\"")){
+                        RESULT=" style"+a2.toString()+"\"color:orange\";";
+
+                     }else if((a1.equals("textocolor"))&& a3.equals("\"morado\"")){
+                        RESULT=" style"+a2.toString()+"\"color:purple\";";
+
+                      }else if((a1.equals("textocolor"))&& a3.equals("\"gris\"")){
+                        RESULT=" style"+a2.toString()+"\"color:gray\";";
+                      }else if((a1.equals("color"))&& a3.equals("\"rojo\"")){
+                        RESULT=" class=\"colorrojo\" ";
+                      }else if((a1.equals("color"))&& a3.equals("\"amarillo\"")){
+                        RESULT=" class=\"coloramarillo\" ";
+                      }else if((a1.equals("color"))&& a3.equals("\"azul\"")){
+                        RESULT=" class=\"colorazul\" ";
+                      }else if((a1.equals("color"))&& a3.equals("\"verde\"")){
+                        RESULT=" class=\"colorverde\" ";
+                      }else if((a1.equals("color"))&& a3.equals("\"anaranjado\"")){
+                        RESULT=" class=\"coloranaranjado\" ";                      
+                      }else if((a1.equals("color"))&& a3.equals("\"gris\"")){
+                        RESULT=" class=\"colorgris\" ";
+                      }else if((a1.equals("color"))&& a3.equals("\"morado\"")){
+                        RESULT=" class=\"colormorado\" ";
+                      }else{
+                        RESULT="";
+                         System.out.println("Error semantico");
+                  }
+                  
+
+                    
                 :}
 ;
-
+//style="color:red;"
 COLOR_ETIQUETA1::= color:a1
                 {:
-                  RESULT=a1.toString();
+                  RESULT="color";
                 :}
                   |textocolor:a1
                 {:
-                  RESULT=a1.toString();
+                  RESULT="textocolor";
                 :}
 ;
 
 ALIGN::=align:a1 asignacion:a2 cadena:a3
                     {:
-                        RESULT=a1.toString()+a2.toString()+a3.toString();
+                        if(a3.equals("\"izquierda\"")){
+                            RESULT=" "+a1.toString()+a2.toString()+"\"left\"";
+                        }else if ((a3.equals("\"derecha\""))){
+                            RESULT=" "+a1.toString()+a2.toString()+"\"right\" ";
+                        }else if((a3.equals("\"centrado\""))){
+                            RESULT=" "+a1.toString()+a2.toString()+"\"center\" ";
+                        }else{
+                        RESULT="";
+                        System.out.println("Error semantico");
+                        }
                     :}
 ;
 
 FUENTES::= font:a1 asignacion:a2 cadena:a3
                     {:
-                        RESULT=a1.toString()+a2.toString()+a3.toString();
+                        RESULT=a1.toString()+" face"+a2.toString()+a3.toString();
                     :}
 ;
 

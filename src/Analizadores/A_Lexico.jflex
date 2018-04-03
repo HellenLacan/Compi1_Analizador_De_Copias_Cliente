@@ -414,6 +414,7 @@ ComentarioLinea =  "/" "/" [^}\n]*
 //{ComentarioLinea}            {  System.out.println("Reconocio "+yytext()+" coment"); return new Symbol(Simbolos.cadena, yycolumn, yyline, yytext());}
  {caracter}    { System.out.println("Reconocio "+yytext()+" cadena"); return new Symbol(Simbolos.caracter, yycolumn, yyline, yytext()); }
 
+
 //------> Espacios
 [ \t\r\n\f]                  {/* Espacios en blanco, se ignoran */}
 //{ComentarioMultiLinea}       { /* ignorar */ }
